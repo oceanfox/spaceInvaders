@@ -1,0 +1,7 @@
+C:\Users\arnav\source\repos\oceanfox\spaceInvaders\spaceInvaders\spaceInvaders\bin\Debug\spaceInvaders.exe.config
+C:\Users\arnav\source\repos\oceanfox\spaceInvaders\spaceInvaders\spaceInvaders\bin\Debug\spaceInvaders.exe
+C:\Users\arnav\source\repos\oceanfox\spaceInvaders\spaceInvaders\spaceInvaders\bin\Debug\spaceInvaders.pdb
+C:\Users\arnav\source\repos\oceanfox\spaceInvaders\spaceInvaders\spaceInvaders\obj\Debug\spaceInvaders.csprojAssemblyReference.cache
+C:\Users\arnav\source\repos\oceanfox\spaceInvaders\spaceInvaders\spaceInvaders\obj\Debug\spaceInvaders.csproj.CoreCompileInputs.cache
+C:\Users\arnav\source\repos\oceanfox\spaceInvaders\spaceInvaders\spaceInvaders\obj\Debug\spaceInvaders.exe
+C:\Users\arnav\source\repos\oceanfox\spaceInvaders\spaceInvaders\spaceInvaders\obj\Debug\spaceInvaders.pdb
