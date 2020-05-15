@@ -12,5 +12,11 @@ namespace spaceInvaders
         {
             Console.WriteLine("Hello, From Nathan");
         }
+        
+        
+    }
+    class Game
+    {
+
     }
 }
