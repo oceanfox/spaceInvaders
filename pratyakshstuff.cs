@@ -114,7 +114,7 @@ namespace GameTest
 
         public Game()
         {
-            player = new Player(20, 18);
+            player = new Player(20, 38);
             aliens = new Alien[15];
             for (int i = 0; i < aliens.Length; i++)
             {
@@ -135,6 +135,11 @@ namespace GameTest
                     if (player.bullet.OffScreen()) player.bullet = null;
                 }
 
+                for (int i = 0; i < aliens.Length; i++)
+                {
+                    aliens[i].SetPosition((aliens[i].posX + 1) % 40, aliens[i].posY);
+                }
+
                 Draw();
             }
         }
@@ -149,6 +154,7 @@ namespace GameTest
         
         public void Draw()
         {
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
             
             for (int i = 0; i < aliens.Length; i++)
@@ -157,6 +163,7 @@ namespace GameTest
             }
 
             DrawPixel(player.x, player.y, ConsoleColor.White);
+            if (player.bullet != null) DrawPixel(player.bullet.posX, player.bullet.posY, ConsoleColor.Red);
         }
     }
 }
