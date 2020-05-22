@@ -1,8 +1,4 @@
 using System;
-using System.Data;
-using System.IO.Pipes;
-using System.Net.Sockets;
-using System.Runtime.Remoting.Messaging;
 using System.Threading;
 
 namespace spaceInvaders
