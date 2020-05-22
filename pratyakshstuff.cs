@@ -42,7 +42,7 @@ namespace spaceInvaders
 
         public bool OffScreen()
         {
-            if (_posY > 0 && _posY <= 40)
+            if (_posY >= 0 && _posY <= 40)
             {
                 return false;
             }
@@ -99,7 +99,7 @@ namespace spaceInvaders
                         moved = true;
                         break;
                     case ConsoleKey.RightArrow:
-                        if (x < 40) x += 1;
+                        if (x < 39) x += 1;
                         moved = true;
                         break;
                     case ConsoleKey.A:
@@ -107,7 +107,7 @@ namespace spaceInvaders
                         moved = true;
                         break;
                     case ConsoleKey.D:
-                        if (x < 40) x += 1;
+                        if (x < 39) x += 1;
                         moved = true;
                         break;
                     case ConsoleKey.Escape:
@@ -148,6 +148,8 @@ namespace spaceInvaders
             bool win = false;
             while (!player.quit)
             {
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.CursorVisible = false;
                 if (dt % 10 == 0)
                 {
                     int prevX = player.x;
