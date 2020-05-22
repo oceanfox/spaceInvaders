@@ -32,7 +32,6 @@ namespace spaceInvaders
             _posX = posX;
             _posY = posY;
             _direction = direction;
-            Console.Beep(1000, 10);
         }
 
         public void Move()
@@ -115,7 +114,6 @@ namespace spaceInvaders
                         quit = true;
                         break;
                 }
-                Console.Beep(5000, 10);
                 if (key.Key == ConsoleKey.Spacebar && bullet == null)
                 {
                     bullet = new Bullet(x, y, -1);
@@ -172,7 +170,7 @@ namespace spaceInvaders
                         if (aliens[i] != null)
                         {
                             alive++;
-                            if (dt % aliens.Length == 0)
+                            if (dt % 50 == 0)
                             {
                                 DrawPixel(aliens[i].posX, aliens[i].posY, ConsoleColor.Black);
                                 if (aliens[i].posX >= 39)
@@ -202,7 +200,9 @@ namespace spaceInvaders
                     {
                         win = true;
                         player.quit = true;
-                    } else Draw();
+                    }
+                    
+                    Draw();
                 }
                 
                 Thread.Sleep(5);
@@ -214,6 +214,13 @@ namespace spaceInvaders
                 Console.Clear();
                 Console.WriteLine("You win");
             }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("You lose");
+            }
+
+            Console.ReadLine();
         }
 
         public void DrawPixel(int x, int y, ConsoleColor color)
