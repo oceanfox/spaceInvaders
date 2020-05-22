@@ -209,6 +209,8 @@ namespace spaceInvaders
                 dt++;
             }
 
+            Console.BackgroundColor = ConsoleColor.Black;
+
             if (win)
             {
                 Console.Clear();
