@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Data;
 using System.IO.Pipes;
 using System.Net.Sockets;
@@ -24,7 +25,7 @@ namespace GameTest
         public int posX { get => _posX; set => _posX = value; }
         public int posY { get => _posY; set => _posY = value; }
 
-        public Bullet(int posY, int posX)
+        public Bullet(int posX, int posY)
         {
             _posX = posX;
             _posY = posY;
@@ -32,7 +33,7 @@ namespace GameTest
 
         public void Move()
         {
-            // Moves bullet up by 1
+            // Moves bullet up by 2
             _posY = _posY - 1;
         }
 
@@ -60,7 +61,7 @@ namespace GameTest
             _posY = posY;
         }
 
-        public void SetPosition(int posY, int posX)
+        public void SetPosition(int posX, int posY)
         {
             _posY = posY;
             _posX = posX;
@@ -76,14 +77,17 @@ namespace GameTest
 
         public Bullet bullet;
         
+        public int tick = 0;
+        
         public Player (int x, int y)
         {
             this.x = x;
             this.y = y;
         }
 
-        public void GetInput()
+        public bool GetInput()
         {
+            bool moved = false;
             if (Console.KeyAvailable)
             {
                 var key = Console.ReadKey(true);
@@ -91,19 +95,25 @@ namespace GameTest
                 {
                     case ConsoleKey.LeftArrow:
                         if(x>0) x-=1;
+                        moved = true;
                         break;
                     case ConsoleKey.RightArrow:
-                        if(x<40) x+=1;
+                        if(x<39) x+=1;
+                        moved = true;
                         break;
                     case ConsoleKey.Escape:
                         quit = true;
                         break;
                 }
-                if(key.Key == ConsoleKey.Spacebar)
+                if(key.Key == ConsoleKey.Spacebar && bullet == null)
                 {
                     bullet = new Bullet(x, y);
                 }
             }
+
+            while (Console.KeyAvailable) Console.ReadKey(true);
+
+            return moved;
         }
     }
 
@@ -111,11 +121,14 @@ namespace GameTest
     {
         private Alien[] aliens;
         private Player player;
+        private int dt;
 
         public Game()
         {
             player = new Player(20, 38);
             aliens = new Alien[15];
+            dt = 0;
+            
             for (int i = 0; i < aliens.Length; i++)
             {
                 aliens[i] = new Alien((i % 5) * 2, (i / 5) * 2);
@@ -126,22 +139,72 @@ namespace GameTest
 
         public void Run()
         {
+            bool win = false;
             while (!player.quit)
             {
-                player.GetInput();
-                if (player.bullet != null)
+                if (dt % 10 == 0)
                 {
-                    player.bullet.Move();
-                    if (player.bullet.OffScreen()) player.bullet = null;
-                }
+                    int prevX = player.x;
+                    int prevY = player.y;
+                    if (player.GetInput())
+                    {
+                        DrawPixel(prevX, prevY, ConsoleColor.Black);
+                    }
 
-                for (int i = 0; i < aliens.Length; i++)
-                {
-                    aliens[i].SetPosition((aliens[i].posX + 1) % 40, aliens[i].posY);
-                }
+                    if (player.bullet != null)
+                    {
+                        DrawPixel(player.bullet.posX, player.bullet.posY, ConsoleColor.Black);
+                        player.bullet.Move();
+                        if (player.bullet.OffScreen()) player.bullet = null;
+                    }
 
-                Draw();
+                    if (aliens.Length == 0)
+                    {
+                        player.quit = true;
+                        win = true;
+                    }
+                    
+                    for (int i = 0; i < aliens.Length; i++)
+                    {
+                        if (aliens[i] != null)
+                        {
+                            if (dt % aliens.Length == 0)
+                            {
+                                DrawPixel(aliens[i].posX, aliens[i].posY, ConsoleColor.Black);
+                                if (aliens[i].posX >= 39)
+                                {
+                                    aliens[i].SetPosition(0, aliens[i].posY + 1);
+                                    if (aliens[i].posY >= 38) player.quit = true;
+                                }
+                                else
+                                {
+                                    aliens[i].SetPosition(aliens[i].posX + 1, aliens[i].posY);
+                                }
+                            }
+                            if (player.bullet != null)
+                            {
+                                if (aliens[i].posX == player.bullet.posX && aliens[i].posY == player.bullet.posY)
+                                {
+                                    DrawPixel(aliens[i].posX, aliens[i].posY, ConsoleColor.Black);
+                                    aliens[i] = null;
+                                    player.bullet = null;
+                                }
+                            }   
+                        }
+                    }
+
+                    Draw();
+                }
+                
+                System.Threading.Thread.Sleep(5);
+                dt++;
             }
+
+            Console.Clear();
+            if (win) Console.WriteLine("You win");
+            else Console.WriteLine("You lose");
+
+            Console.ReadLine();
         }
 
         public void DrawPixel(int x, int y, ConsoleColor color)
@@ -150,16 +213,14 @@ namespace GameTest
             Console.CursorTop = y;
             Console.BackgroundColor = color;
             Console.Write("  ");
+            Console.BackgroundColor = ConsoleColor.Black;
         }
         
         public void Draw()
         {
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.Clear();
-            
             for (int i = 0; i < aliens.Length; i++)
             {
-                DrawPixel(aliens[i].posX, aliens[i].posY, ConsoleColor.Green);
+                if (aliens[i] != null) DrawPixel(aliens[i].posX, aliens[i].posY, ConsoleColor.Green);
             }
 
             DrawPixel(player.x, player.y, ConsoleColor.White);
