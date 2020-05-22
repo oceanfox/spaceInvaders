@@ -100,6 +100,14 @@ namespace spaceInvaders
                         if (x < 40) x += 1;
                         moved = true;
                         break;
+                    case ConsoleKey.A:
+                        if (x > 0) x -= 1;
+                        moved = true;
+                        break;
+                    case ConsoleKey.D:
+                        if (x < 40) x += 1;
+                        moved = true;
+                        break;
                     case ConsoleKey.Escape:
                         quit = true;
                         break;
@@ -156,15 +164,28 @@ namespace spaceInvaders
 
                     for (int i = 0; i < aliens.Length; i++)
                     {
-                        DrawPixel(aliens[i].posX, aliens[i].posY, ConsoleColor.Black);
-                        if (aliens[i].posX >= 39)
+                        if (aliens[i] != null)
                         {
-                            aliens[i].SetPosition(0, aliens[i].posY + 1);
-                            if (aliens[i].posY >= 38) player.quit = true;
-                        }
-                        else
-                        {
-                            aliens[i].SetPosition(aliens[i].posX + 1, aliens[i].posY);
+                            DrawPixel(aliens[i].posX, aliens[i].posY, ConsoleColor.Black);
+                            if (aliens[i].posX >= 39)
+                            {
+                                aliens[i].SetPosition(0, aliens[i].posY + 1);
+                                if (aliens[i].posY >= 38) player.quit = true;
+                            }
+                            else
+                            {
+                                aliens[i].SetPosition(aliens[i].posX + 1, aliens[i].posY);
+                            }
+
+                            if (player.bullet != null)
+                            {
+                                if (aliens[i].posX == player.bullet.posX && aliens[i].posY == player.bullet.posY)
+                                {
+                                    DrawPixel(aliens[i].posX, aliens[i].posY, ConsoleColor.Black);
+                                    aliens[i] = null;
+                                    player.bullet = null;
+                                }
+                            }
                         }
                     }
 
@@ -190,7 +211,7 @@ namespace spaceInvaders
 
             for (int i = 0; i < aliens.Length; i++)
             {
-                DrawPixel(aliens[i].posX, aliens[i].posY, ConsoleColor.Green);
+                if (aliens[i] != null) DrawPixel(aliens[i].posX, aliens[i].posY, ConsoleColor.Green);
             }
 
             DrawPixel(player.x, player.y, ConsoleColor.White);
