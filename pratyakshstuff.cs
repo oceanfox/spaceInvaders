@@ -105,7 +105,7 @@ namespace spaceInvaders
                         break;
                 }
 
-                if (key.Key == ConsoleKey.Spacebar)
+                if (key.Key == ConsoleKey.Spacebar && bullet == null)
                 {
                     bullet = new Bullet(x, y);
                 }
